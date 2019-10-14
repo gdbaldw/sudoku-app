@@ -24,11 +24,12 @@
 }
 
 article {
+  width: 27rem;
+  margin: auto;
   display: grid;
-  justify-content: center;
   grid-template-columns: repeat(9, 3rem);
   grid-template-rows: repeat(9, 3rem);
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 input {
@@ -45,11 +46,13 @@ button {
   margin: 1rem;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@media screen and (max-width: 600px) {
+  html {
+    font-size: 10px;
   }
-  to {
-    transform: rotate(360deg);
+
+  button {
+    margin: 0.5rem;
+    padding: 0.2rem;
   }
 }
