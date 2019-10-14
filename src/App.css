@@ -23,16 +23,26 @@
   color: #61dafb;
 }
 
-.field {
-  width: 2rem;
-  height: 3rem;
+article {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(9, 3rem);
+  grid-template-rows: repeat(9, 3rem);
+  margin-bottom: 2rem;
+}
+
+input {
   font-size: 2rem;
   text-align: center;
   color: #888;
 }
 
-.field[readonly] {
+input[readonly] {
   color: #222;
+}
+
+button {
+  margin: 1rem;
 }
 
 @keyframes App-logo-spin {

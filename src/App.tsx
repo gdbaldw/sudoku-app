@@ -1,51 +1,65 @@
 import React, { useState } from "react";
 import "./App.css";
-import { SudokuBoard } from "./components/SudokuBoard";
 const sudoku = require("sudoku");
 
-interface Col {
-  row: number;
-  col: number;
-  value: number;
-  readonly: boolean;
-}
-
-interface Row {
-  cols: Col[];
-  index: number;
-}
-
-export interface Puzzle {
-  rows: Row[];
-}
-
-function makePuzzle(): Puzzle {
-  const raw = sudoku.makepuzzle();
-  const rows: Row[] = [];
-  const puzzle: Puzzle = { rows: rows };
-
-  for (let i = 0; i < 9; i++) {
-    const cols: Col[] = [];
-    const row: Row = { cols: cols, index: i };
-    for (let j = 0; j < 9; j++) {
-      const value = raw[i * 9 + j];
-      const col = { row: i, col: j, value: value, readonly: value != null };
-      row.cols.push(col);
-    }
-    puzzle.rows.push(row);
-  }
-
-  return puzzle;
-}
-
 const App: React.FC = () => {
-  const [puzzle, setPuzzle] = useState(makePuzzle());
+  const [puzzle, setPuzzle] = useState(sudoku.makepuzzle());
+  const [work, setWork] = useState([...puzzle]);
   return (
     <div className="App">
       <header className="App-header">
         <h1>Sudoku App</h1>
       </header>
-      <SudokuBoard puzzle={puzzle} />
+
+      <article>
+        {work.map((cv: any, i: number) => (
+          <input
+            key={i}
+            value={cv === null ? "" : cv + 1}
+            readOnly={puzzle[i] !== null}
+            onChange={e => {
+              const value = parseInt(e.target.value);
+              if (0 < value && value < 10) {
+                const temp = [...work];
+                temp.splice(i, 1, -1 + value);
+                setWork(temp);
+              }
+            }}
+          />
+        ))}
+      </article>
+
+      <button
+        onClick={() => {
+          alert(
+            sudoku
+              .solvepuzzle(puzzle)
+              .every((v: number, i: number) => v === work[i])
+              ? "Congratulations! You have solved the puzzle."
+              : "Sorry, try again."
+          );
+        }}
+      >
+        Check solution
+      </button>
+
+      <button
+        onClick={() => {
+          setWork(sudoku.solvepuzzle(puzzle));
+        }}
+      >
+        Solve
+      </button>
+
+      <button
+        onClick={() => {
+          const temp = sudoku.makepuzzle();
+          setPuzzle(temp);
+          setWork(temp);
+        }}
+      >
+        New puzzle
+      </button>
     </div>
   );
 };
